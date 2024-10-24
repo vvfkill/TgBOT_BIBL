@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Горьковская библиотека</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        h1 {
+            color: #333;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 10px;
+            font-size: 1em;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            background-color: #4CAF50;
+            color: white;
+        }
+        .info {
+            display: none;
+            margin-top: 20px;
+        }
+        iframe {
+            width: 100%;
+            height: 300px;
+            border: none;
+        }
+        form {
+            margin-top: 20px;
+            text-align: left;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Горьковская библиотека</h1>
+
+        <!-- Форма для ввода данных пользователя -->
+        <form id="userDataForm">
+            <label for="firstName">Имя</label>
+            <input type="text" id="firstName" name="firstName" required>
+
+            <label for="lastName">Фамилия</label>
+            <input type="text" id="lastName" name="lastName" required>
+
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" required>
+
+            <button type="submit">Отправить данные</button>
+        </form>
+
+        <div id="result"></div>
+
+        <div id="contacts" class="info">
+            <h2>Контакты</h2>
+            <p>Телефон: 8(49133)2-48-37. </p>
+            <p>Электронная почта: mby.gdk@yandex.ru</p>
+            <p> gdk.sasovo@ryazan.gov.ru</p>
+        </div>
+
+        <div id="hours" class="info">
+            <h2>Время работы</h2>
+            <p>Понедельник - Пятница: с 08:00 до 17:00</p>
+            <p>Суббота и Воскресенье: закрыто</p>
+        </div>
+
+        <div id="location" class="info">
+            <h2>Местоположение</h2>
+            <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2413.2411957323924!2d41.927676!3d54.347270!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x413f1543531bb999%3A0x29db31c8899f69a!2z0L_RgC4g0KLQtdGA0LTRgNC-0L3QsNGPINGD0LsuLCAxOCwg0KXQvtC60L7RgNC-0LUsINCi0L7QvdC40YbQsCwgMzkyMDE1!5e0!3m2!1sru!2sru!4v1698000185654!5m2!1sru!2sru&center=54.347270,41.927676&zoom=17"
+                frameborder="0" allowfullscreen></iframe>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('userDataForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            // Собираем данные формы
+            const firstName = document.getElementById('firstName').value;
+            const lastName = document.getElementById('lastName').value;
+            const email = document.getElementById('email').value;
+
+            // Отправляем данные боту через fetch API
+            fetch('https://api.telegram.org/bot7606438331:AAE1ITyUMh3Ll7ZHFcrpwZotlP5uyFPHb7g/sendMessage', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    chat_id: '832642362',
+                    text: `Имя: ${firstName}\nФамилия: ${lastName}\nEmail: ${email}`,
+                }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.ok) {
+                    document.getElementById('result').innerHTML = 'Данные отправлены успешно!';
+                } else {
+                    document.getElementById('result').innerHTML = 'Ошибка при отправке данных.';
+                }
+            })
+            .catch(error => {
+                document.getElementById('result').innerHTML = 'Произошла ошибка.';
+                console.error('Error:', error);
+            });
+        });
+    </script>
+</body>
+</html>
+
